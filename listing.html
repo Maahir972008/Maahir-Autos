@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maahir Autos | Full Inventory (50 cars)</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* LIGHT MODE (DEFAULT) */
+        :root {
+            --bg-body: #f4f7fc;
+            --bg-card: #ffffff;
+            --bg-nav: #ffffff;
+            --bg-highlight: #e9f0fc;
+            --text-primary: #0a2e5a;
+            --text-secondary: #1e3f6e;
+            --border-light: #d0e0ff;
+            --border-strong: #acc6ec;
+            --accent-blue: #1e5eb0;
+            --accent-gold: #c5a028;
+            --shadow-color: rgba(30, 80, 150, 0.1);
+            --input-bg: #f5f9ff;
+            --input-border: #bccdec;
+            --footer-bg: #ffffff;
+            --btn-blue: #1e5eb0;
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --bg-nav: #1a1a1a;
+            --bg-highlight: #2a2a2a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-light: #3a3a3a;
+            --border-strong: #555;
+            --accent-blue: #3b82f6;
+            --accent-gold: #c5a028;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --input-bg: #2a2a2a;
+            --input-border: #4a4a4a;
+            --footer-bg: #1a1a1a;
+            --btn-blue: #2a4f8a;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.5;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s;
+        }
+        html { scroll-behavior: smooth; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+        /* navigation */
+        .navbar {
+            padding: 24px 0;
+            border-bottom: 2px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            background-color: var(--bg-nav);
+            border-radius: 0 0 24px 24px;
+            padding-left: 24px;
+            padding-right: 24px;
+            box-shadow: 0 6px 14px var(--shadow-color);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--accent-blue), #2e4a7a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            border-right: 2px solid var(--accent-blue);
+            padding-right: 20px;
+        }
+        .logo i {
+            color: var(--accent-blue);
+            margin-right: 8px;
+            font-size: 2rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            font-weight: 500;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 6px;
+        }
+        .nav-links a:hover {
+            border-bottom-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+        .nav-links a.active {
+            border-bottom-color: var(--accent-gold);
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 60px;
+            padding: 8px 18px;
+            cursor: pointer;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        h2 {
+            font-size: 2.3rem;
+            margin: 40px 0;
+            color: var(--text-primary);
+            position: relative;
+        }
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 70px;
+            height: 3px;
+            background: var(--accent-blue);
+        }
+
+        /* enlarged car grid – bigger cards */
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 35px;
+            margin-top: 30px;
+        }
+
+        .car-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 2px solid var(--border-light);
+            transition: all 0.25s ease;
+            box-shadow: 0 15px 25px -10px var(--shadow-color);
+            padding-bottom: 20px;
+        }
+        .car-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -10px rgba(30, 94, 176, 0.3);
+        }
+
+        /* highlight when targeted from homepage */
+        .car-card:target {
+            border: 2px solid var(--border-light);
+            box-shadow: 0 0 0 4px rgba(136, 49, 6, 0.5), 0 25px 30px -8px none;
+            animation: pulse-border 0.5s ease-in-out 4;
+        }
+        @keyframes pulse-border {
+            0% { border-color: var(--accent-gold); box-shadow: 0 0 0 4px rgba(197,160,40,0.5); }
+            50% { border-color: var(--accent-blue); box-shadow: green }
+            100% {  box-shadow: darkblue; }
+        }
+
+        /* main image area larger */
+        .car-img {
+            background: var(--bg-highlight);
+            height: 220px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 4rem;
+            border-bottom: 1px solid var(--border-light);
+            object-fit: cover;
+        }
+        .car-img i {
+            background: linear-gradient(145deg, var(--accent-blue), #4782d7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .car-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .car-details {
+            padding: 22px 20px;
+        }
+
+        .car-name {
+            font-size: 1.6rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+        .car-name span {
+            color: var(--accent-blue);
+            background: var(--bg-highlight);
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 1rem;
+        }
+
+        .car-price {
+            margin: 15px 0 15px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px dashed var(--border-strong);
+            padding-bottom: 15px;
+        }
+        .car-price i {
+            color: var(--accent-blue);
+            font-size: 1.6rem;
+        }
+
+        /* REAR & INTERIOR - with proper image display */
+        .image-group {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .image-group .thumb {
+            background: var(--bg-highlight);
+            border-radius: 18px;
+            padding: 10px;
+            font-size: 2.2rem;
+            flex: 1 1 0;
+            min-width: 130px;
+            min-height: 120px;
+            text-align: center;
+            border: 2px solid var(--border-light);
+            color: var(--accent-blue);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        /* Style for images inside thumb */
+        .image-group .thumb img {
+            max-width: 100%;
+            max-height: 80px;
+            object-fit: contain;
+            margin-bottom: 5px;
+            transition: all 0.25s ease;
+        }
+        
+        /* Style for icon fallback (if image fails to load) */
+        .image-group .thumb i {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .image-group .thumb span {
+            font-size: 0.9rem;
+            display: block;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* expanded size on hover AND click */
+        .image-group .thumb:hover,
+        .image-group .thumb:active,
+        .image-group .thumb.expanded {
+            min-width: 200px;
+            min-height: 180px;
+            transform: scale(1.05);
+            border-color: var(--accent-gold);
+            background: var(--bg-card);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 10;
+            margin: 0 5px;
+        }
+        
+        .image-group .thumb:hover img,
+        .image-group .thumb:active img,
+        .image-group .thumb.expanded img {
+            max-height: 120px;
+        }
+
+        .installment-badge {
+            background: var(--bg-highlight);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            padding: 10px 18px;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border-strong);
+            margin-top: 10px;
+        }
+        .installment-badge i {
+            color: var(--accent-blue);
+        }
+
+        .footer-note {
+            border-top: 2px solid var(--border-light);
+            padding: 30px 0;
+            margin-top: 60px;
+            text-align: center;
+            color: var(--text-secondary);
+            background-color: var(--footer-bg);
+            border-radius: 40px 40px 0 0;
+        }
+
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; align-items: start; gap: 15px; }
+            .nav-links { gap: 25px; }
+            h2 { font-size: 1.9rem; }
+            .car-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- navigation with HOME tab -->
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-gem"></i> MAAHIR AUTOS
+            </div>
+            <div style="display: flex; align-items: center; gap: 30px;">
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="listing.html" class="active">Listing</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="theme-toggle" id="darkModeToggle">
+                    <i class="fas fa-moon"></i> <span>Dark</span>
+                </button>
+            </div>
+        </nav>
+
+        <h2>Complete Inventory (50 Cars) – enlarged rear & interior</h2>
+        <div class="car-grid" id="listing-grid">
+            <!-- ========== 1-10 ========== -->
+            <!-- 1: Mercedes-AMG C43 -->
+            <div class="car-card" id="merc43">
+                <div class="car-img">
+                    <img src="Mercedes-Benz .jpeg" alt="Mercedes-AMG C43" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car-side\'></i>';">
+                </div>
+                <div class="car-details">
+                    <div class="car-name">Mercedes-AMG C43 <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 58,500,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/Mercedes AMG c43 (1).jpg" alt="Mercedes C43 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="https://di-uploads-pod7.dealerinspire.com/autohausonedens/uploads/2022/12/23Mercedes-CClass-AMGInteriorFront-5x3-1.jpg" alt="Mercedes C43 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦8.7M</div>
+                </div>
+            </div>
+
+            <!-- 2: Range Rover Sport -->
+            <div class="car-card" id="rrsport23">
+                <div class="car-img"><img src="range rover sport .jpg" alt="Range Rover Sport" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-truck-pickup\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Range Rover Sport <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 94,200,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="https://www.topgear.com/sites/default/files/2022/12/TopGear%20-%20Drives%20-%20RR%20Sport%20Hybrid%20-005.jpg" alt="Range Rover Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqRJx9iLyHMFfJU9UYVv2063IWnk7vOr7EyQ&s" alt="Range Rover Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦14.2M</div>
+                </div>
+            </div>
+
+            <!-- 3: Lexus LX 600 -->
+            <div class="car-card" id="lx600">
+                <div class="car-img"><img src="lexuslx 600.jpg" alt="Lexus LX 600" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Lexus LX 600 <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 125,000,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlP6wXrH0LPMcpLcQxLlIBrzRGVirPN__Ewg&s" alt="Lexus LX600 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKdAMF34uQ4uMwSBveFcCyYFnRnY_KVjUc0Q&s" alt="Lexus LX600 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦19.9M</div>
+                </div>
+            </div>
+
+            <!-- 4: Porsche Cayenne -->
+            <div class="car-card" id="cayenne24">
+                <div class="car-img"><img src="Porsche .jpg" alt="Porsche Cayenne" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-caravan\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Porsche Cayenne <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 87,750,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwxJvS85lSVClkcaRsf63X42m3TXdB88ctRg&s" alt="Porsche Cayenne Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwkye8IBuRV_L2wGCTv2jNPnaThdRGPqTZpA&s" alt="Porsche Cayenne Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦13.4M</div>
+                </div>
+            </div>
+
+            <!-- 5: BMW X7 -->
+            <div class="car-card" id="bmwx7">
+                <div class="car-img"><img src="bmw.jpg" alt="BMW X7" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car-side\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">BMW X7 M60i <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 102,300,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4yp4Yq6rv-jJ9hAQHsudSgpGL3K5F8wQyog&s" alt="BMW X7 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0YKRx-9Vlb6ffOMxWtm1zjoP7s4bBEbbKLQ&s" alt="BMW X7 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦16.0M</div>
+                </div>
+            </div>
+
+            <!-- 6: Land Cruiser -->
+            <div class="car-card" id="landcruiser24">
+                <div class="car-img"><img src="land cruiser .jpg" alt="Land Cruiser" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Toyota Land Cruiser <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 79,900,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP-fhPSKZlN_ZPpQbWlQXYOhYtTZ20GMcZwA&s" alt="Land Cruiser Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="https://www.netcarshow.com/Toyota-Land_Cruiser-2013-Interior.62b22285.jpg" alt="Land Cruiser Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦11.5M</div>
+                </div>
+            </div>
+
+            <!-- 7: Bentley Bentayga -->
+            <div class="car-card" id="bentayga23">
+                <div class="car-img"><img src="Bentley .jpg" alt="Bentley" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-caravan\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Bentley Bentayga <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 210,000,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKHqjqYaiTrfwmpkxXA5RFmzR5j5pV4K8RjQ&s" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="https://media.drivingelectric.com/image/private/s--fgDz6uxv--/v1597790655/drivingelectric/2019-12/0bentleybentaygahybrid.jpg" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦31.5M</div>
+                </div>
+            </div>
+
+            <!-- 8: Ford Raptor -->
+            <div class="car-card" id="raptor25">
+                <div class="car-img"><img src="raptor .jpg" alt="Raptor" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-truck\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Ford Ranger Raptor <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 44,250,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSnk-cUd7HzBysIdwK8WEVvExvu3RfiC0SxQ&s" alt="Ford Raptor Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-truck\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCQppW3SGCvdPhT1ntZkBAOdp2wq5UeRp7mw&s" alt="Ford Raptor Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦6.8M</div>
+                </div>
+            </div>
+
+            <!-- 9: Audi Q8 -->
+            <div class="car-card">
+                <div class="car-img"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSs-2h8TzlqzM1ZwGGi493_lFrIvR0lOjYOvg&s" alt="Audi Q8" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Audi Q8 <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 67,200,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAtM87_w5Eujna9EP9rsZOKR4yU2GALcDHKg&s" alt="Audi Q8 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs_yyL5JeO-D4BzgGTKwA3Qv6GqnYFd7co3g&s" alt="Audi Q8 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦10.2M</div>
+                </div>
+            </div>
+
+            <!-- 10: Volvo XC90 -->
+            <div class="car-card">
+                <div class="car-img"><img src="" alt="Volvo XC90" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Volvo XC90 <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 55,000,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/volvo xc90 rear.jpg" alt="Volvo XC90 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/volvo xc90 interior.jpg" alt="Volvo XC90 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦8.5M</div>
+                </div>
+            </div>
+
+            <!-- ========== 11-20 ========== -->
+            <!-- 11: Jeep Wrangler -->
+            <div class="car-card">
+                <div class="car-img"><img src="jeep wrangler.jpg" alt="Jeep Wrangler" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Jeep Wrangler <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 48,900,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/jeep wrangler rear.jpg" alt="Jeep Wrangler Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/jeep wrangler interior.jpg" alt="Jeep Wrangler Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦7.4M</div>
+                </div>
+            </div>
+
+            <!-- 12: Tesla Model X -->
+            <div class="car-card">
+                <div class="car-img"><img src="tesla model x.jpg" alt="Tesla Model X" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Tesla Model X <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 89,900,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/tesla model x rear.jpg" alt="Tesla Model X Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/tesla model x interior.jpg" alt="Tesla Model X Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦13.8M</div>
+                </div>
+            </div>
+
+            <!-- 13: Maserati Levante -->
+            <div class="car-card">
+                <div class="car-img"><img src="maserati levante.jpg" alt="Maserati Levante" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Maserati Levante <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 76,500,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/maserati levante rear.jpg" alt="Maserati Levante Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/maserati levante interior.jpg" alt="Maserati Levante Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦11.7M</div>
+                </div>
+            </div>
+
+            <!-- 14: Chevrolet Tahoe -->
+            <div class="car-card">
+                <div class="car-img"><img src="chevrolet tahoe.jpg" alt="Chevrolet Tahoe" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Chevrolet Tahoe <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 52,300,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/chevrolet tahoe rear.jpg" alt="Chevrolet Tahoe Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/chevrolet tahoe interior.jpg" alt="Chevrolet Tahoe Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦8.2M</div>
+                </div>
+            </div>
+
+            <!-- 15: GMC Yukon -->
+            <div class="car-card">
+                <div class="car-img"><img src="gmc yukon.jpg" alt="GMC Yukon" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">GMC Yukon <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 54,800,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/gmc yukon rear.jpg" alt="GMC Yukon Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/gmc yukon interior.jpg" alt="GMC Yukon Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦8.5M</div>
+                </div>
+            </div>
+
+            <!-- 16: Cadillac Escalade -->
+            <div class="car-card">
+                <div class="car-img"><img src="cadillac escalade.jpg" alt="Cadillac Escalade" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Cadillac Escalade <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 98,400,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/cadillac escalade rear.jpg" alt="Cadillac Escalade Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/cadillac escalade interior.jpg" alt="Cadillac Escalade Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦15.2M</div>
+                </div>
+            </div>
+
+            <!-- 17: Lincoln Navigator -->
+            <div class="car-card">
+                <div class="car-img"><img src="lincoln navigator.jpg" alt="Lincoln Navigator" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Lincoln Navigator <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 89,500,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/lincoln navigator rear.jpg" alt="Lincoln Navigator Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/lincoln navigator interior.jpg" alt="Lincoln Navigator Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦13.9M</div>
+                </div>
+            </div>
+
+            <!-- 18: Infiniti QX80 -->
+            <div class="car-card">
+                <div class="car-img"><img src="infiniti qx80.jpg" alt="Infiniti QX80" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Infiniti QX80 <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 71,200,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/infiniti qx80 rear.jpg" alt="Infiniti QX80 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/infiniti qx80 interior.jpg" alt="Infiniti QX80 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦11.0M</div>
+                </div>
+            </div>
+
+            <!-- 19: Mitsubishi Pajero -->
+            <div class="car-card">
+                <div class="car-img"><img src="mitsubishi pajero.jpg" alt="Mitsubishi Pajero" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Mitsubishi Pajero <span>'22</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 38,500,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/mitsubishi pajero rear.jpg" alt="Mitsubishi Pajero Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/mitsubishi pajero interior.jpg" alt="Mitsubishi Pajero Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦6.0M</div>
+                </div>
+            </div>
+
+            <!-- 20: Nissan Patrol -->
+            <div class="car-card">
+                <div class="car-img"><img src="nissan patrol.jpg" alt="Nissan Patrol" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Nissan Patrol <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 68,500,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/nissan patrol rear.jpg" alt="Nissan Patrol Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/nissan patrol interior.jpg" alt="Nissan Patrol Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦10.5M</div>
+                </div>
+            </div>
+
+            <!-- ========== 21-30 ========== -->
+            <!-- 21: Kia Telluride -->
+            <div class="car-card">
+                <div class="car-img"><img src="kia telluride.jpg" alt="Kia Telluride" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Kia Telluride <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 41,200,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/kia telluride rear.jpg" alt="Kia Telluride Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/kia telluride interior.jpg" alt="Kia Telluride Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦6.5M</div>
+                </div>
+            </div>
+
+            <!-- 22: Hyundai Palisade -->
+            <div class="car-card">
+                <div class="car-img"><img src="hyundai palisade.jpg" alt="Hyundai Palisade" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Hyundai Palisade <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 39,800,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/hyundai palisade rear.jpg" alt="Hyundai Palisade Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/hyundai palisade interior.jpg" alt="Hyundai Palisade Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦6.2M</div>
+                </div>
+            </div>
+
+            <!-- 23: Ford Expedition -->
+            <div class="car-card">
+                <div class="car-img"><img src="ford expedition.jpg" alt="Ford Expedition" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Ford Expedition <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 58,200,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/ford expedition rear.jpg" alt="Ford Expedition Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/ford expedition interior.jpg" alt="Ford Expedition Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦9.0M</div>
+                </div>
+            </div>
+
+            <!-- 24: Ram 1500 -->
+            <div class="car-card">
+                <div class="car-img"><img src="ram 1500.jpg" alt="Ram 1500" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-truck\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Ram 1500 <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 47,300,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/ram 1500 rear.jpg" alt="Ram 1500 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-truck\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/ram 1500 interior.jpg" alt="Ram 1500 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦7.3M</div>
+                </div>
+            </div>
+
+            <!-- 25: Mazda CX-9 -->
+            <div class="car-card">
+                <div class="car-img"><img src="mazda cx9.jpg" alt="Mazda CX-9" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Mazda CX-9 <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 36,500,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/mazda cx9 rear.jpg" alt="Mazda CX-9 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/mazda cx9 interior.jpg" alt="Mazda CX-9 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦5.8M</div>
+                </div>
+            </div>
+
+            <!-- 26: Subaru Ascent -->
+            <div class="car-card">
+                <div class="car-img"><img src="subaru ascent.jpg" alt="Subaru Ascent" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Subaru Ascent <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 42,100,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/subaru ascent rear.jpg" alt="Subaru Ascent Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/subaru ascent interior.jpg" alt="Subaru Ascent Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦6.7M</div>
+                </div>
+            </div>
+
+            <!-- 27: Volkswagen Atlas -->
+            <div class="car-card">
+                <div class="car-img"><img src="volkswagen atlas.jpg" alt="Volkswagen Atlas" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Volkswagen Atlas <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 44,900,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/volkswagen atlas rear.jpg" alt="Volkswagen Atlas Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/volkswagen atlas interior.jpg" alt="Volkswagen Atlas Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦7.0M</div>
+                </div>
+            </div>
+
+            <!-- 28: Honda Pilot -->
+            <div class="car-card">
+                <div class="car-img"><img src="honda pilot.jpg" alt="Honda Pilot" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Honda Pilot <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 41,800,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/honda pilot rear.jpg" alt="Honda Pilot Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/honda pilot interior.jpg" alt="Honda Pilot Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦6.5M</div>
+                </div>
+            </div>
+
+            <!-- 29: Toyota Highlander -->
+            <div class="car-card">
+                <div class="car-img"><img src="toyota highlander.jpg" alt="Toyota Highlander" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Toyota Highlander <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 46,200,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/toyota highlander rear.jpg" alt="Toyota Highlander Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/toyota highlander interior.jpg" alt="Toyota Highlander Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦7.2M</div>
+                </div>
+            </div>
+
+            <!-- 30: Acura MDX -->
+            <div class="car-card">
+                <div class="car-img"><img src="acura mdx.jpg" alt="Acura MDX" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Acura MDX <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 52,800,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/acura mdx rear.jpg" alt="Acura MDX Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/acura mdx interior.jpg" alt="Acura MDX Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦8.1M</div>
+                </div>
+            </div>
+
+            <!-- ========== 31-40 ========== -->
+            <!-- 31: Pagani Zonda -->
+            <div class="car-card">
+                <div class="car-img"><img src="pagani zonda.jpg" alt="Pagani Zonda" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Pagani Zonda HP Barchetta <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 870,390,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/pagani zonda rear.jpg" alt="Pagani Zonda Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/pagani zonda interior.jpg" alt="Pagani Zonda Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦210.4M</div>
+                </div>
+            </div>
+
+            <!-- 32: Bugatti Chiron -->
+            <div class="car-card">
+                <div class="car-img"><img src="bugatti chiron.jpg" alt="Bugatti Chiron" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Bugatti Chiron Super Sport <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 747,440,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/bugatti chiron rear.jpg" alt="Bugatti Chiron Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/bugatti chiron interior.jpg" alt="Bugatti Chiron Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦120.3M</div>
+                </div>
+            </div>
+
+            <!-- 33: Koenigsegg Gemera -->
+            <div class="car-card">
+                <div class="car-img"><img src="koenigsegg gemera.jpg" alt="Koenigsegg Gemera" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Koenigsegg Gemera <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 1,247,880,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/koenigsegg gemera rear.jpg" alt="Koenigsegg Gemera Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/koenigsegg gemera interior.jpg" alt="Koenigsegg Gemera Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦407.0M</div>
+                </div>
+            </div>
+
+            <!-- 34: Rolls-Royce Cullinan -->
+            <div class="car-card">
+                <div class="car-img"><img src="rolls royce cullinan.jpg" alt="Rolls-Royce Cullinan" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Rolls-Royce Cullinan <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 547,600,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/rolls royce cullinan rear.jpg" alt="Rolls-Royce Cullinan Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/rolls royce cullinan interior.jpg" alt="Rolls-Royce Cullinan Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦97.2M</div>
+                </div>
+            </div>
+
+            <!-- 35: Rolls-Royce Phantom -->
+            <div class="car-card">
+                <div class="car-img"><img src="rolls royce phantom.jpg" alt="Rolls-Royce Phantom" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Rolls-Royce Phantom <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 460,900,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/rolls royce phantom rear.jpg" alt="Rolls-Royce Phantom Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/rolls royce phantom interior.jpg" alt="Rolls-Royce Phantom Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦50.4M</div>
+                </div>
+            </div>
+
+            <!-- 36: Lamborghini Aventador -->
+            <div class="car-card">
+                <div class="car-img"><img src="lamborghini aventador.jpg" alt="Lamborghini Aventador" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Lamborghini Aventador <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 347,306,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/lamborghini aventador rear.jpg" alt="Lamborghini Aventador Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/lamborghini aventador interior.jpg" alt="Lamborghini Aventador Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦48.9M</div>
+                </div>
+            </div>
+
+            <!-- 37: Mercedes-Benz Brabus G V12 900 -->
+            <div class="car-card">
+                <div class="car-img"><img src="mercedes brabus g.jpg" alt="Mercedes Brabus G" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Mercedes-Benz Brabus G V12 900 <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 147,100,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/mercedes brabus g rear.jpg" alt="Mercedes Brabus G Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/mercedes brabus g interior.jpg" alt="Mercedes Brabus G Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦20.8M</div>
+                </div>
+            </div>
+
+            <!-- 38: Lamborghini Huracán -->
+            <div class="car-card">
+                <div class="car-img"><img src="lamborghini huracan.jpg" alt="Lamborghini Huracán" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Lamborghini Huracán <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 147,320,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/lamborghini huracan rear.jpg" alt="Lamborghini Huracán Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/lamborghini huracan interior.jpg" alt="Lamborghini Huracán Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦23.6M</div>
+                </div>
+            </div>
+
+            <!-- 39: Ferrari 812 Superfast -->
+            <div class="car-card">
+                <div class="car-img"><img src="ferrari 812.jpg" alt="Ferrari 812 Superfast" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Ferrari 812 Superfast <span>'24</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 227,500,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/ferrari 812 rear.jpg" alt="Ferrari 812 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/ferrari 812 interior.jpg" alt="Ferrari 812 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦41.4M</div>
+                </div>
+            </div>
+
+            <!-- 40: Porsche 911 -->
+            <div class="car-card">
+                <div class="car-img"><img src="porsche 911.jpg" alt="Porsche 911" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Porsche 911 <span>'22</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 199,300,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/porsche 911 rear.jpg" alt="Porsche 911 Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/porsche 911 interior.jpg" alt="Porsche 911 Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦30.2M</div>
+                </div>
+            </div>
+
+            <!-- ========== 41-50 ========== -->
+            <!-- 41: Mercedes-Maybach GLS 600 -->
+            <div class="car-card">
+                <div class="car-img"><img src="mercedes maybach gls.jpg" alt="Mercedes-Maybach GLS" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Mercedes-Maybach GLS 600 <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 202,200,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/mercedes maybach gls rear.jpg" alt="Mercedes-Maybach GLS Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/mercedes maybach gls interior.jpg" alt="Mercedes-Maybach GLS Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦45.0M</div>
+                </div>
+            </div>
+
+            <!-- 42: Ferrari Spider -->
+            <div class="car-card">
+                <div class="car-img"><img src="ferrari spider.jpg" alt="Ferrari Spider" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Ferrari Spider <span>'21</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 223,300,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/ferrari spider rear.jpg" alt="Ferrari Spider Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/ferrari spider interior.jpg" alt="Ferrari Spider Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦50.3M</div>
+                </div>
+            </div>
+
+            <!-- 43: Mercedes-Benz EQE -->
+            <div class="car-card">
+                <div class="car-img"><img src="mercedes eqe.jpg" alt="Mercedes-Benz EQE" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Mercedes-Benz EQE <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 132,650,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/mercedes eqe rear.jpg" alt="Mercedes EQE Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/mercedes eqe interior.jpg" alt="Mercedes EQE Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦22.2M</div>
+                </div>
+            </div>
+
+            <!-- 44: Audi e-tron -->
+            <div class="car-card">
+                <div class="car-img"><img src="audi etron.jpg" alt="Audi e-tron" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Audi e-tron <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 147,300,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/audi etron rear.jpg" alt="Audi e-tron Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/audi etron interior.jpg" alt="Audi e-tron Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦25.3M</div>
+                </div>
+            </div>
+
+            <!-- 45: Cadillac Escalade (second) -->
+            <div class="car-card">
+                <div class="car-img"><img src="cadillac escalade 23.jpg" alt="Cadillac Escalade" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Cadillac Escalade <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 97,350,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/cadillac escalade 23 rear.jpg" alt="Cadillac Escalade Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/cadillac escalade interior.jpg" alt="Cadillac Escalade Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦15.9M</div>
+                </div>
+            </div>
+
+            <!-- 46: Aston Martin One -->
+            <div class="car-card">
+                <div class="car-img"><img src="aston martin one.jpg" alt="Aston Martin One" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Aston Martin One <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 487,000,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/aston martin one rear.jpg" alt="Aston Martin One Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/aston martin one interior.jpg" alt="Aston Martin One Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦77.3M</div>
+                </div>
+            </div>
+
+            <!-- 47: Lamborghini Veneno -->
+            <div class="car-card">
+                <div class="car-img"><img src="lamborghini veneno.jpg" alt="Lamborghini Veneno" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Lamborghini Veneno <span>'22</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 237,900,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/lamborghini veneno rear.jpg" alt="Lamborghini Veneno Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/lamborghini veneno interior.jpg" alt="Lamborghini Veneno Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦39.1M</div>
+                </div>
+            </div>
+
+            <!-- 48: Bugatti Centodieci -->
+            <div class="car-card">
+                <div class="car-img"><img src="bugatti centodieci.jpg" alt="Bugatti Centodieci" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Bugatti Centodieci <span>'25</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 747,400,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/bugatti centodieci rear.jpg" alt="Bugatti Centodieci Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/bugatti centodieci interior.jpg" alt="Bugatti Centodieci Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦87.8M</div>
+                </div>
+            </div>
+
+            <!-- 49: Koenigsegg CCXR Trevita -->
+            <div class="car-card">
+                <div class="car-img"><img src="koenigsegg ccxr.jpg" alt="Koenigsegg CCXR" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Koenigsegg CCXR Trevita <span>'23</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 2,347,300,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/koenigsegg ccxr rear.jpg" alt="Koenigsegg CCXR Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/koenigsegg ccxr interior.jpg" alt="Koenigsegg CCXR Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦220.3M</div>
+                </div>
+            </div>
+
+            <!-- 50: Acura NSX -->
+            <div class="car-card">
+                <div class="car-img"><img src="acura nsx.jpg" alt="Acura NSX" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';"></div>
+                <div class="car-details">
+                    <div class="car-name">Acura NSX <span>'21</span></div>
+                    <div class="car-price"><i class="fas fa-naira-sign"></i> 307,600,000</div>
+                    <div class="image-group">
+                        <div class="thumb" tabindex="0">
+                            <img src="Car rears/acura nsx rear.jpg" alt="Acura NSX Rear" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car\'></i>';">
+                            <span>REAR VIEW</span>
+                        </div>
+                        <div class="thumb" tabindex="0">
+                            <img src="Car interiors/acura nsx interior.jpg" alt="Acura NSX Interior" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-couch\'></i>';">
+                            <span>INTERIOR</span>
+                        </div>
+                    </div>
+                    <div class="installment-badge"><i class="fas fa-hand-holding-usd"></i> initial: ₦71.9M</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- explicit count indicator -->
+        <div style="text-align: center; margin: 50px 0 30px; font-size: 1.2rem; color: var(--accent-blue); background: var(--bg-highlight); padding: 20px; border-radius: 60px; border: 1px solid var(--border-light);">
+            <i class="fas fa-check-circle"></i> 50 vehicles displayed — each with enlarged rear & interior views. Hover or click on images to expand.
+        </div>
+
+        <!-- footer -->
+        <div class="footer-note">
+            <i class="fas fa-gem" style="color: var(--accent-blue);"></i> MAAHIR AUTOS · Abeokuta, Ogun State · +234 906 123 0710
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        const toggle = document.getElementById('darkModeToggle');
+        toggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = toggle.querySelector('i');
+            const span = toggle.querySelector('span');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+                span.textContent = 'Light';
+            } else {
+                icon.className = 'fas fa-moon';
+                span.textContent = 'Dark';
+            }
+        });
+
+        // Add click-to-expand functionality for thumbs
+        document.querySelectorAll('.image-group .thumb').forEach(thumb => {
+            thumb.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Remove expanded class from all thumbs in the same group
+                const parentGroup = this.closest('.image-group');
+                parentGroup.querySelectorAll('.thumb').forEach(t => {
+                    if (t !== this) t.classList.remove('expanded');
+                });
+                
+                // Toggle expanded class on clicked thumb
+                this.classList.toggle('expanded');
+            });
+        });
+
+        // Close expanded thumbs when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.thumb')) {
+                document.querySelectorAll('.thumb.expanded').forEach(thumb => {
+                    thumb.classList.remove('expanded');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
