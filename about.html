@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maahir Autos | About</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        :root {
+            --bg-body: #f4f7fc;
+            --bg-card: #ffffff;
+            --bg-nav: #ffffff;
+            --bg-highlight: #e9f0fc;
+            --text-primary: #0a2e5a;
+            --text-secondary: #1e3f6e;
+            --border-light: #d0e0ff;
+            --border-strong: #acc6ec;
+            --accent-blue: #1e5eb0;
+            --accent-gold: #c5a028;
+            --shadow-color: rgba(30, 80, 150, 0.12);
+            --footer-bg: #ffffff;
+            --btn-blue: #1e5eb0;
+        }
+        body.dark-mode {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --bg-nav: #1a1a1a;
+            --bg-highlight: #2a2a2a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-light: #3a3a3a;
+            --border-strong: #555;
+            --accent-blue: #3b82f6;
+            --accent-gold: #c5a028;
+            --shadow-color: rgba(0, 0, 0, 0.45);
+            --footer-bg: #1a1a1a;
+            --btn-blue: #2a4f8a;
+        }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at top 10% 10%, rgba(30,94,176,0.16), transparent 28%),
+                        linear-gradient(180deg, rgba(255,255,255,0.9), rgba(239,245,252,0.95) 52%, var(--bg-body) 100%);
+            z-index: -2;
+        }
+        .moving-car {
+            position: fixed;
+            top: 14%;
+            left: -420px;
+            width: 420px;
+            height: 72px;
+            border-radius: 46px;
+            background: linear-gradient(135deg, rgba(24,60,120,0.95), rgba(33,97,177,0.95));
+            box-shadow: 0 24px 50px rgba(30,94,176,0.28);
+            z-index: -1;
+            overflow: hidden;
+            animation: drive 16s linear infinite;
+        }
+        .moving-car.reverse {
+            top: 26%;
+            left: auto;
+            right: -420px;
+            background: linear-gradient(135deg, rgba(227,81,46,0.95), rgba(255,156,88,0.95));
+            animation-name: drive-back;
+        }
+        .moving-car::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 20px;
+            width: 220px;
+            height: 60px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02), rgba(255,255,255,0.18));
+            transform: skewX(-18deg);
+            filter: blur(2px);
+        }
+        .moving-car.reverse::before {
+            left: auto;
+            right: 20px;
+            transform: skewX(18deg);
+        }
+        .moving-car::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            width: 34px;
+            height: 34px;
+            margin-top: -17px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(56,147,255,0.25);
+        }
+        .moving-car.reverse::after {
+            left: 20px;
+            right: auto;
+        }
+        @keyframes drive {
+            0% { transform: translateX(0) skewX(-3deg); }
+            100% { transform: translateX(140vw) skewX(-3deg); }
+        }
+        @keyframes drive-back {
+            0% { transform: translateX(0) skewX(3deg); }
+            100% { transform: translateX(-140vw) skewX(3deg); }
+        }
+        html { scroll-behavior: smooth; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        .navbar {
+            padding: 24px 24px;
+            border-bottom: 2px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            background-color: var(--bg-nav);
+            border-radius: 0 0 24px 24px;
+            box-shadow: 0 6px 14px var(--shadow-color);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--accent-blue), #2e4a7a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            border-right: 2px solid var(--accent-blue);
+            padding-right: 20px;
+        }
+        .logo i { color: var(--accent-blue); margin-right: 8px; font-size: 2rem; }
+        .nav-links { display: flex; gap: 32px; flex-wrap: wrap; align-items: center; flex: 1 1 auto; min-width: 0; }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 6px;
+        }
+        .nav-links a:hover,
+        .nav-links a.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); font-weight: 600; }
+        .nav-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; min-width: 0; justify-content: flex-end; }
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 60px;
+            padding: 10px 16px;
+            cursor: pointer;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+        .theme-toggle:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .page-header { padding: 80px 0 20px; }
+        .page-header h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: 1.05; max-width: 780px; color: var(--text-primary); }
+        .page-header p { margin-top: 18px; max-width: 720px; color: var(--text-secondary); font-size: 1.05rem; }
+        .split-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 32px; margin-top: 40px; align-items: start; }
+        .brand-story, .profile-card, .trust-grid, .vision-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 28px; padding: 32px; box-shadow: 0 20px 38px -24px var(--shadow-color); }
+        .brand-story h2, .vision-card h2, .trust-grid h2 { font-size: 2rem; color: var(--text-primary); margin-bottom: 18px; }
+        .brand-story p, .vision-card p, .profile-card p { color: var(--text-secondary); line-height: 1.8; }
+        .feature-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 28px; }
+        .feature-pill { background: var(--bg-highlight); border-radius: 18px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px; }
+        .feature-pill i { color: var(--accent-blue); font-size: 1.35rem; margin-top: 4px; }
+        .feature-pill strong { display: block; margin-bottom: 6px; color: var(--text-primary); }
+        .quote-card { background: linear-gradient(135deg, rgba(30,94,176,0.12), rgba(197,160,40,0.12)); border: 1px solid rgba(197,160,40,0.16); padding: 28px; border-radius: 28px; margin-top: 24px; }
+        .quote-card p { color: var(--text-primary); font-size: 1.1rem; line-height: 1.8; }
+        .quote-card strong { display: block; margin-top: 16px; color: var(--accent-gold); }
+        .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .trust-item { background: var(--bg-highlight); border-radius: 22px; padding: 24px; border: 1px solid var(--border-light); }
+        .trust-item h3 { font-size: 1.5rem; color: var(--accent-blue); margin-bottom: 12px; }
+        .trust-item p { color: var(--text-secondary); line-height: 1.7; }
+        .callout { margin: 50px 0 30px; padding: 36px 32px; border-radius: 28px; background: var(--accent-blue); color: white; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; }
+        .callout h3 { font-size: 1.8rem; max-width: 600px; }
+        .callout a { display: inline-flex; align-items: center; gap: 10px; background: white; color: var(--accent-blue); padding: 14px 24px; border-radius: 999px; text-decoration: none; font-weight: 700; }
+        @media (max-width: 980px) { .split-grid { grid-template-columns: 1fr; } .trust-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 760px) { .nav-links { gap: 18px; } .theme-toggle { width: 100%; justify-content: center; } .nav-actions { width: 100%; } }
+        @media (max-width: 680px) { .container { padding: 0 18px; } .navbar { padding: 18px 0; } .page-header { padding-top: 60px; } .brand-story, .profile-card, .vision-card, .trust-grid { padding: 24px; } }
+    </style>
+</head>
+<body>
+    <div class="moving-car" aria-hidden="true"></div>
+    <div class="moving-car reverse" aria-hidden="true"></div>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-gem"></i> MAAHIR AUTOS
+            </div>
+            <div class="nav-actions">
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="listing.html">Listing</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="about.html" class="active">About</a>
+                </div>
+                <button class="theme-toggle" id="darkModeToggle">
+                    <i class="fas fa-moon"></i> <span>Dark</span>
+                </button>
+            </div>
+        </nav>
+        <section class="page-header">
+            <h1>About Maahir Autos</h1>
+            <p>We bring premium, trusted cars to buyers across Nigeria with transparent pricing, verified service history, and white-glove support for every journey.</p>
+        </section>
+        <div class="split-grid">
+            <div class="brand-story">
+                <h2>Driven by trust, built for every driver</h2>
+                <p>Since 2012, Maahir Autos has matched discerning customers with high-quality vehicles and frictionless ownership. We blend expert curation, responsive service, and smart financing to make buying a car easier and more enjoyable.</p>
+                <div class="feature-list">
+                    <div class="feature-pill">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>Verified inventory</strong>
+                            Every car is inspected and test-driven before it reaches our showroom.
+                        </div>
+                    </div>
+                    <div class="feature-pill">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Fast delivery</strong>
+                            Nationwide shipping and handover scheduling for every purchase.
+                        </div>
+                    </div>
+                    <div class="feature-pill">
+                        <i class="fas fa-handshake"></i>
+                        <div>
+                            <strong>Clear pricing</strong>
+                            Honest fees, no surprise costs, and full transparency on each model.
+                        </div>
+                    </div>
+                    <div class="feature-pill">
+                        <i class="fas fa-cogs"></i>
+                        <div>
+                            <strong>Service promise</strong>
+                            Maintenance guidance and trusted partner garages keep your car running well.
+                        </div>
+                    </div>
+                </div>
+                <div class="quote-card">
+                    <p>“Our mission is to redefine how Nigerians buy premium cars: simple, safe, and supported at every step.”</p>
+                    <strong>— The Maahir Autos team</strong>
+                </div>
+            </div>
+            <div class="profile-card">
+                <h2>Our values</h2>
+                <p>We believe in transparent service, trusted relationships, and vehicle ownership that adds confidence, not complexity. Every delivery, inspection, and conversation is designed to earn that trust.</p>
+                <div class="trust-grid">
+                    <div class="trust-item">
+                        <h3>2300+</h3>
+                        <p>Vehicles sold across Lagos, Abuja, and beyond with repeat customers and excellent reviews.</p>
+                    </div>
+                    <div class="trust-item">
+                        <h3>50+</h3>
+                        <p>Premium cars ready to explore, from luxury SUVs to executive sedans and sports models.</p>
+                    </div>
+                    <div class="trust-item">
+                        <h3>7-day support</h3>
+                        <p>Dedicated aftercare assistance and follow-up checks after your vehicle handover.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vision-card">
+            <h2>What we stand for</h2>
+            <p>Every customer deserves a car-buying experience that feels modern, honest, and welcoming. We do that by combining well-maintained inventory, clear communication, and an expert sales team focused on your needs.</p>
+        </div>
+        <section class="callout">
+            <div>
+                <h3>Ready to explore your next car with confidence?</h3>
+                <p>Visit our full inventory or reach out to schedule a test drive today.</p>
+            </div>
+            <a href="listing.html"><i class="fas fa-arrow-right"></i> Browse inventory</a>
+        </section>
+    </div>
+    <script>
+        const themeToggle = document.getElementById('darkModeToggle');
+        const darkModeKey = 'maahir-dark-mode';
+        const carAnimationKey = 'maahir-car-base';
+        const animationDuration = 16;
+        function applyTheme(enabled) {
+            document.body.classList.toggle('dark-mode', enabled);
+            themeToggle.innerHTML = enabled ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Dark';
+        }
+        function getCarBaseTime() {
+            let base = parseInt(localStorage.getItem(carAnimationKey), 10);
+            if (!base || Number.isNaN(base)) {
+                base = Date.now();
+                localStorage.setItem(carAnimationKey, String(base));
+            }
+            return base;
+        }
+        function syncCars() {
+            const base = getCarBaseTime();
+            const elapsed = ((Date.now() - base) / 1000) % animationDuration;
+            document.querySelectorAll('.moving-car').forEach(el => {
+                el.style.animationDelay = `-${elapsed}s`;
+            });
+        }
+        applyTheme(localStorage.getItem(darkModeKey) === 'true');
+        themeToggle.addEventListener('click', () => {
+            const next = !document.body.classList.contains('dark-mode');
+            applyTheme(next);
+            localStorage.setItem(darkModeKey, String(next));
+        });
+        syncCars();
+    </script>
+</body>
+</html>

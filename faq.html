@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maahir Autos | FAQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        :root {
+            --bg-body: #f4f7fc;
+            --bg-card: #ffffff;
+            --bg-nav: #ffffff;
+            --bg-highlight: #e9f0fc;
+            --text-primary: #0a2e5a;
+            --text-secondary: #1e3f6e;
+            --border-light: #d0e0ff;
+            --border-strong: #acc6ec;
+            --accent-blue: #1e5eb0;
+            --accent-gold: #c5a028;
+            --shadow-color: rgba(30, 80, 150, 0.1);
+            --footer-bg: #ffffff;
+            --btn-blue: #1e5eb0;
+        }
+        body.dark-mode {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --bg-nav: #1a1a1a;
+            --bg-highlight: #2a2a2a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-light: #3a3a3a;
+            --border-strong: #555;
+            --accent-blue: #3b82f6;
+            --accent-gold: #c5a028;
+            --shadow-color: rgba(0, 0, 0, 0.45);
+            --footer-bg: #1a1a1a;
+            --btn-blue: #2a4f8a;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at top 10% 10%, rgba(30,94,176,0.16), transparent 28%),
+                        linear-gradient(180deg, rgba(255,255,255,0.9), rgba(239,245,252,0.95) 52%, var(--bg-body) 100%);
+            z-index: -2;
+        }
+        .moving-car {
+            position: fixed;
+            top: 14%;
+            left: -420px;
+            width: 420px;
+            height: 72px;
+            border-radius: 46px;
+            background: linear-gradient(135deg, rgba(24,60,120,0.95), rgba(33,97,177,0.95));
+            box-shadow: 0 24px 50px rgba(30,94,176,0.28);
+            z-index: -1;
+            overflow: hidden;
+            animation: drive 16s linear infinite;
+        }
+        .moving-car.reverse {
+            top: 26%;
+            left: auto;
+            right: -420px;
+            background: linear-gradient(135deg, rgba(227,81,46,0.95), rgba(255,156,88,0.95));
+            animation-name: drive-back;
+        }
+        .moving-car::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 20px;
+            width: 220px;
+            height: 60px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02), rgba(255,255,255,0.18));
+            transform: skewX(-18deg);
+            filter: blur(2px);
+        }
+        .moving-car.reverse::before {
+            left: auto;
+            right: 20px;
+            transform: skewX(18deg);
+        }
+        .moving-car::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            width: 34px;
+            height: 34px;
+            margin-top: -17px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(56,147,255,0.25);
+        }
+        .moving-car.reverse::after {
+            left: 20px;
+            right: auto;
+        }
+        @keyframes drive {
+            0% { transform: translateX(0) skewX(-3deg); }
+            100% { transform: translateX(140vw) skewX(-3deg); }
+        }
+        @keyframes drive-back {
+            0% { transform: translateX(0) skewX(3deg); }
+            100% { transform: translateX(-140vw) skewX(3deg); }
+        }
+        html { scroll-behavior: smooth; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        .navbar {
+            padding: 24px 24px;
+            border-bottom: 2px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            background-color: var(--bg-nav);
+            border-radius: 0 0 24px 24px;
+            box-shadow: 0 6px 14px var(--shadow-color);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--accent-blue), #2e4a7a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            border-right: 2px solid var(--accent-blue);
+            padding-right: 20px;
+        }
+        .logo i { color: var(--accent-blue); margin-right: 8px; font-size: 2rem; }
+        .nav-links { display: flex; gap: 28px; flex-wrap: wrap; align-items: center; flex: 1 1 auto; min-width: 0; }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 6px;
+        }
+        .nav-links a:hover,
+        .nav-links a.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); font-weight: 600; }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            min-width: 0;
+            justify-content: flex-end;
+        }
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 60px;
+            padding: 10px 16px;
+            cursor: pointer;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+        .theme-toggle i { width: 18px; text-align: center; }
+        .theme-toggle:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .page-header { padding: 80px 0 30px; }
+        .page-header h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: 1.05; max-width: 760px; color: var(--text-primary); }
+        .page-header p { margin-top: 18px; max-width: 720px; color: var(--text-secondary); font-size: 1.05rem; }
+
+        .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 40px; }
+        .faq-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 28px; padding: 32px; box-shadow: 0 18px 40px -18px var(--shadow-color); display: flex; flex-direction: column; gap: 24px; }
+        .faq-card h2 { font-size: 2rem; margin-bottom: 10px; }
+        .faq-item { border-top: 1px solid var(--border-light); padding: 14px 0; }
+        .faq-item:first-child { border-top: none; padding-top: 0; }
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 18px 14px;
+            color: var(--text-primary);
+            font-weight: 600;
+            background: var(--bg-highlight);
+            border-radius: 18px;
+            border: 1px solid transparent;
+            width: 100%;
+            text-align: left;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+        .faq-question:hover { border-color: var(--accent-blue); background: rgba(30,94,176,0.07); }
+        .faq-question span { flex: 1; }
+        .faq-question i { color: var(--accent-blue); font-size: 1.1rem; transition: transform 0.2s ease; }
+        .faq-answer { color: var(--text-secondary); line-height: 1.75; max-height: 0; overflow: hidden; transition: max-height 0.28s ease, padding 0.28s ease; }
+        .faq-item.active .faq-answer { max-height: 320px; padding-top: 12px; }
+        .faq-item.active .faq-question { border-color: var(--accent-gold); background: rgba(197,160,40,0.12); }
+        .faq-item.active .faq-question i { transform: rotate(45deg); }
+
+        .support-card { background: rgba(30,94,176,0.06); border: 1px solid rgba(30,94,176,0.12); border-radius: 28px; padding: 32px; }
+        .support-card h3 { font-size: 1.65rem; margin-bottom: 18px; color: var(--accent-blue); }
+        .support-card p { color: var(--text-secondary); margin-bottom: 16px; }
+        .support-card a { display: inline-flex; align-items: center; gap: 10px; background: var(--accent-blue); color: white; padding: 14px 24px; border-radius: 999px; text-decoration: none; font-weight: 600; }
+        .support-card a:hover { opacity: 0.95; }
+        .footer-note { margin: 60px 0 30px; text-align: center; color: var(--text-secondary); }
+
+        @media (max-width: 980px) { .faq-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 760px) {
+            .nav-links { gap: 18px; }
+            .theme-toggle { width: 100%; justify-content: center; }
+            .nav-actions { width: 100%; }
+            .navbar { padding: 18px 18px; }
+        }
+        @media (max-width: 680px) {
+            .container { padding: 0 18px; }
+            .navbar { padding: 18px 0; }
+            .page-header { padding-top: 60px; }
+            .faq-card, .support-card { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="moving-car" aria-hidden="true"></div>
+    <div class="moving-car reverse" aria-hidden="true"></div>
+    <div class="container">
+         <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-gem"></i> MAAHIR AUTOS
+            </div>
+            <div class="nav-actions">
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="listing.html">Listing</a>
+                    <a href="faq.html" class="active">FAQ</a>
+                    <a href="about.html">About</a>
+                </div>
+                <button class="theme-toggle" id="darkModeToggle">
+                    <i class="fas fa-moon"></i> <span>Dark</span>
+                </button>
+            </div>
+        </nav>
+
+        <section class="page-header">
+            <h1>Frequently asked questions for premium car buyers.</h1>
+            <p>Everything you need to know about pricing, delivery, warranties, and aftercare at Maahir Autos — all in one modern, responsive FAQ hub.</p>
+        </section>
+
+        <div class="faq-grid">
+            <div class="faq-card">
+                <h2>General</h2>
+                <div class="faq-item active">
+                    <button class="faq-question"><span>Do you ship to other states?</span><i class="fas fa-plus"></i></button>
+                    <div class="faq-answer"><p>Yes. Maahir Autos arranges nationwide delivery with tracked transport and insurance. Request shipping details during purchase.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question"><span>Can I reserve a car before payment?</span><i class="fas fa-plus"></i></button>
+                    <div class="faq-answer"><p>Yes. We hold selected vehicles for 48 hours when a reservation deposit is made. Contact support to secure your choice.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question"><span>What documents are required?</span><i class="fas fa-plus"></i></button>
+                    <div class="faq-answer"><p>Valid ID, proof of address, and payment confirmation are required. We also provide handling for company or import documentation when needed.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question"><span>Are prices negotiable?</span><i class="fas fa-plus"></i></button>
+                    <div class="faq-answer"><p>Prices are competitive and can be reviewed on a case-by-case basis for fleet purchases, direct buyers, or repeat customers.</p></div>
+                </div>
+            </div>
+
+            <div class="faq-card">
+                <h2>Ownership & service</h2>
+                <div class="faq-item">
+                    <button class="faq-question"><span>What warranty comes with the cars?</span><i class="fas fa-plus"></i></button>
+                    <div class="faq-answer"><p>Most vehicles include a 12-month limited warranty. Extended plans are available for luxury and imported models.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question"><span>Can I inspect the car before buying?</span><i class="fas fa-plus"></i></button>
+                    <div class="faq-answer"><p>Yes. We welcome inspections by your mechanic or third-party inspector before final purchase. Choose a convenient pre-delivery date.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question"><span>Do you offer financing?</span><i class="fas fa-plus"></i></button>
+                    <div class="faq-answer"><p>Yes, Maahir Autos offers tailored financing quotes. Use the home page calculator and speak with our finance team for exact terms.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question"><span>How do I book maintenance?</span><i class="fas fa-plus"></i></button>
+                    <div class="faq-answer"><p>Send us a service request through the contact form below or reach out via WhatsApp for fast booking with our partner service center.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="support-card" id="contact">
+            <h3>Need a direct answer?</h3>
+            <p>Contact our support team for fast responses, customized quotes, or to schedule a viewing. Maahir Autos is available across Nigeria.</p>
+            <a href="https://wa.me/2349061230710" target="_blank"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+        </div>
+
+        <div class="footer-note">Maahir Autos · Abeokuta, Ogun State · +234 906 123 0710</div>
+    </div>
+
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+        const darkModeKey = 'maahir-dark-mode';
+        const carAnimationKey = 'maahir-car-base';
+        const animationDuration = 16;
+        function applyDarkMode(enabled) {
+            document.body.classList.toggle('dark-mode', enabled);
+            const icon = toggle.querySelector('i');
+            const span = toggle.querySelector('span');
+            if (enabled) { icon.className = 'fas fa-sun'; span.textContent = 'Light'; }
+            else { icon.className = 'fas fa-moon'; span.textContent = 'Dark'; }
+        }
+        function getCarBaseTime(){
+            let base=parseInt(localStorage.getItem(carAnimationKey), 10);
+            if(!base||Number.isNaN(base)){
+                base=Date.now();
+                localStorage.setItem(carAnimationKey, String(base));
+            }
+            return base;
+        }
+        function syncCars(){
+            const base=getCarBaseTime();
+            const elapsed=((Date.now()-base)/1000)%animationDuration;
+            document.querySelectorAll('.moving-car').forEach(el=>{
+                el.style.animationDelay=`-${elapsed}s`;
+            });
+        }
+        applyDarkMode(localStorage.getItem(darkModeKey) === 'true');
+        toggle.addEventListener('click', () => {
+            const enabled = !document.body.classList.contains('dark-mode');
+            applyDarkMode(enabled);
+            localStorage.setItem(darkModeKey, String(enabled));
+        });
+        syncCars();
+
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.closest('.faq-item');
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
