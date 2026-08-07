@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Maahir Autos | Full Inventory (50 cars)</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -31,13 +31,14 @@
             --input-border: #bccdec;
             --footer-bg: #ffffff;
             --btn-blue: #1e5eb0;
+            --navbar-dark-bg: #d4e4ff;
         }
 
         /* DARK MODE */
         body.dark-mode {
             --bg-body: #121212;
             --bg-card: #1e1e1e;
-            --bg-nav: #1a1a1a;
+            --bg-nav: #d4e4ff;
             --bg-highlight: #2a2a2a;
             --text-primary: #e0e0e0;
             --text-secondary: #b0b0b0;
@@ -50,6 +51,7 @@
             --input-border: #4a4a4a;
             --footer-bg: #1a1a1a;
             --btn-blue: #2a4f8a;
+            --navbar-dark-bg: #d4e4ff;
         }
 
         body {
@@ -136,106 +138,226 @@
         html { scroll-behavior: smooth; }
         .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
 
-        /* navigation */
+        /* navigation — EXACTLY matches homepage */
         .navbar {
-            padding: 24px 0;
-            border-bottom: 2px solid var(--border-light);
+            width: 100%;
+            padding: 16px 16px;
+            border-bottom: 1px solid rgba(30, 80, 150, 0.12);
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            background-color: var(--bg-nav);
+            gap: 12px 8px;
+            background: var(--bg-nav);
+            backdrop-filter: blur(14px);
             border-radius: 0 0 24px 24px;
-            padding-left: 24px;
-            padding-right: 24px;
-            box-shadow: 0 6px 14px var(--shadow-color);
+            box-shadow: 0 18px 45px -35px var(--shadow-color);
+            position: relative;
+            transition: background 0.2s ease;
+        }
+        body.dark-mode .navbar {
+            background: var(--navbar-dark-bg) !important;
+            border-bottom-color: rgba(30, 80, 150, 0.25);
+        }
+
+        /* LOGO - now clickable to home */
+        .logo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            flex-shrink: 0;
         }
         .logo {
-            font-size: 1.8rem;
-            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.4rem;
+            font-weight: 700;
             background: linear-gradient(135deg, var(--accent-blue), #2e4a7a);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             border-right: 2px solid var(--accent-blue);
-            padding-right: 20px;
+            padding-right: 12px;
         }
         .logo i {
             color: var(--accent-blue);
-            margin-right: 8px;
-            font-size: 2rem;
+            font-size: 1.6rem;
         }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: nowrap;
+            flex: 1 1 auto;
+            justify-content: flex-end;
+        }
+
+        /* nav links - hidden by default on mobile */
         .nav-links {
             display: flex;
-            gap: 40px;
-            font-weight: 500;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: nowrap;
+            transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+            width: 100%;
+            flex-direction: column;
+            background: rgba(30, 94, 176, 0.04);
+            border-radius: 24px;
+            padding: 0 14px;
+            margin-top: 0;
+            order: 10;
+        }
+        .nav-links.expanded {
+            max-height: 360px;
+            opacity: 1;
+            pointer-events: auto;
+            padding: 16px 14px;
+            margin-top: 8px;
         }
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 1.1rem;
-            transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-            border-bottom: 2px solid transparent;
-            padding: 10px 16px;
+            font-size: 1rem;
+            padding: 12px 16px;
             border-radius: 999px;
+            border: 1px solid transparent;
+            transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            white-space: nowrap;
+            width: 100%;
+            text-align: center;
         }
         .nav-links a:hover {
-            background: rgba(197, 160, 40, 0.1);
-            border-bottom-color: transparent;
-            color: var(--accent-gold);
+            background: rgba(30, 94, 176, 0.1);
+            border-color: rgba(30, 94, 176, 0.18);
+            color: var(--accent-blue);
             transform: translateY(-1px);
         }
         .nav-links a.active {
-            background: rgba(197, 160, 40, 0.15);
-            border-bottom-color: transparent;
+            background: rgba(197, 160, 40, 0.16);
+            border-color: rgba(197, 160, 40, 0.24);
             color: var(--accent-gold);
-            font-weight: 600;
+            font-weight: 700;
         }
 
-        .nav-actions {
+        .nav-controls {
             display: flex;
             align-items: center;
-            gap: 24px;
-            flex-wrap: wrap;
+            gap: 8px;
+            flex-shrink: 0;
         }
-
         .theme-toggle {
             background: var(--bg-card);
             border: 1px solid var(--border-light);
             border-radius: 60px;
-            padding: 10px 16px;
+            padding: 10px 12px;
             cursor: pointer;
             color: var(--text-primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
             white-space: nowrap;
             transition: border-color 0.2s ease, transform 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+            font-size: 0.9rem;
+            min-width: 44px;
+            justify-content: center;
         }
         .theme-toggle i { width: 18px; text-align: center; }
+        .theme-toggle span { display: none; }
         .theme-toggle:hover {
             border-color: var(--accent-gold);
             color: var(--accent-gold);
             transform: translateY(-1px);
         }
-        .theme-toggle span { transition: opacity 0.2s ease; }
+
         .nav-toggle {
-            display: none;
             border: 1px solid var(--border-light);
             background: var(--bg-card);
             color: var(--text-primary);
             border-radius: 999px;
-            padding: 10px 14px;
+            padding: 10px 12px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             transition: border-color 0.2s ease, transform 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+            font-size: 1.2rem;
+            min-width: 44px;
         }
         .nav-toggle i { width: 18px; text-align: center; }
         .nav-toggle:hover { border-color: var(--accent-gold); color: var(--accent-gold); transform: translateY(-1px); }
-        .nav-links { transition: max-height 1s ease, opacity 1s ease, transform 1s ease; }
 
+        /* desktop */
+        @media (min-width: 821px) {
+            .navbar {
+                padding: 20px 24px;
+                flex-wrap: nowrap;
+                gap: 20px;
+            }
+            .logo { font-size: 1.8rem; padding-right: 18px; }
+            .logo i { font-size: 2rem; }
+            .nav-links {
+                display: flex;
+                flex-direction: row;
+                max-height: none;
+                opacity: 1;
+                pointer-events: auto;
+                padding: 0;
+                margin: 0;
+                width: auto;
+                background: transparent;
+                border-radius: 0;
+                order: 0;
+                flex: 1 1 auto;
+                justify-content: flex-end;
+                gap: 12px;
+            }
+            .nav-links a {
+                width: auto;
+                padding: 12px 18px;
+                text-align: center;
+            }
+            .nav-toggle { display: none; }
+            .theme-toggle span { display: inline; }
+            .theme-toggle { padding: 10px 16px; }
+            .nav-controls { gap: 12px; }
+        }
+
+        @media (max-width: 820px) {
+            .container { padding: 0 12px; }
+            .navbar { 
+                padding: 14px 12px; 
+                border-radius: 0 0 18px 18px;
+                gap: 10px 6px;
+            }
+            .logo { font-size: 1.2rem; padding-right: 8px; }
+            .logo i { font-size: 1.3rem; }
+            .nav-actions { gap: 4px; flex-wrap: wrap; }
+            .nav-controls { gap: 4px; }
+            .theme-toggle, .nav-toggle { padding: 10px 10px; min-width: 40px; }
+            .nav-links a { font-size: 0.95rem; padding: 12px 10px; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 8px; }
+            .navbar { 
+                padding: 10px 8px; 
+                gap: 6px;
+                border-radius: 0 0 14px 14px;
+            }
+            .logo { font-size: 1rem; gap: 4px; padding-right: 6px; }
+            .logo i { font-size: 1.1rem; }
+            .theme-toggle, .nav-toggle { padding: 8px 8px; min-width: 36px; font-size: 0.9rem; }
+            .nav-links a { font-size: 0.9rem; padding: 10px 8px; }
+            .nav-links.expanded { padding: 12px 8px; }
+        }
+
+        /* rest of page styles */
         h2 {
             font-size: 2.3rem;
             margin: 40px 0;
@@ -252,7 +374,6 @@
             background: var(--accent-blue);
         }
 
-        /* enlarged car grid – bigger cards */
         .car-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
@@ -274,8 +395,6 @@
             transform: translateY(-6px);
             box-shadow: 0 20px 30px -10px rgba(30, 94, 176, 0.3);
         }
-
-        /* highlight when targeted from homepage */
         .car-card:target {
             border: 2px solid var(--border-light);
             box-shadow: 0 0 0 4px rgba(136, 49, 6, 0.5), 0 25px 30px -8px none;
@@ -283,11 +402,10 @@
         }
         @keyframes pulse-border {
             0% { border-color: var(--accent-gold); box-shadow: 0 0 0 4px rgba(197,160,40,0.5); }
-            50% { border-color: var(--accent-blue); box-shadow: green }
-            100% {  box-shadow: darkblue; }
+            50% { border-color: var(--accent-blue); box-shadow: green; }
+            100% { box-shadow: darkblue; }
         }
 
-        /* main image area larger */
         .car-img {
             background: var(--bg-highlight);
             height: 220px;
@@ -324,6 +442,8 @@
             align-items: center;
             color: var(--text-primary);
             margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         .car-name span {
             color: var(--accent-blue);
@@ -343,13 +463,13 @@
             gap: 10px;
             border-bottom: 1px dashed var(--border-strong);
             padding-bottom: 15px;
+            flex-wrap: wrap;
         }
         .car-price i {
             color: var(--accent-blue);
             font-size: 1.6rem;
         }
 
-        /* REAR & INTERIOR - with proper image display */
         .image-group {
             display: flex;
             gap: 20px;
@@ -376,8 +496,6 @@
             justify-content: center;
             overflow: hidden;
         }
-        
-        /* Style for images inside thumb */
         .image-group .thumb img {
             max-width: 100%;
             max-height: 80px;
@@ -385,21 +503,16 @@
             margin-bottom: 5px;
             transition: all 0.25s ease;
         }
-        
-        /* Style for icon fallback (if image fails to load) */
         .image-group .thumb i {
             font-size: 2.5rem;
             margin-bottom: 5px;
         }
-        
         .image-group .thumb span {
             font-size: 0.9rem;
             display: block;
             color: var(--text-secondary);
             font-weight: 600;
         }
-
-        /* expanded size on hover AND click */
         .image-group .thumb:hover,
         .image-group .thumb:active,
         .image-group .thumb.expanded {
@@ -412,7 +525,6 @@
             z-index: 10;
             margin: 0 5px;
         }
-        
         .image-group .thumb:hover img,
         .image-group .thumb:active img,
         .image-group .thumb.expanded img {
@@ -430,11 +542,13 @@
             gap: 10px;
             border: 1px solid var(--border-strong);
             margin-top: 10px;
+            flex-wrap: wrap;
         }
         .installment-badge i {
             color: var(--accent-blue);
         }
 
+        /* FOOTER - phone number underlined like homepage */
         .footer-note {
             border-top: 2px solid var(--border-light);
             padding: 30px 0;
@@ -444,22 +558,20 @@
             background-color: var(--footer-bg);
             border-radius: 40px 40px 0 0;
         }
+        .phone-link {
+            color: var(--accent-blue);
+            text-decoration: underline;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .phone-link:hover {
+            color: var(--accent-gold);
+        }
 
         @media (max-width: 1100px) {
-            .navbar { padding: 20px 18px; }
-            .nav-links { gap: 20px; }
             .car-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
         }
         @media (max-width: 820px) {
-            .navbar { flex-direction: column; align-items: stretch; gap: 18px; }
-            .nav-actions { width: 100%; justify-content: space-between; }
-            .navbar > div { width: 100%; display: flex; justify-content: space-between; align-items: center; }
-            .nav-toggle { display: inline-flex; }
-            .nav-links { flex-direction: column; gap: 12px; width: 100%; background: rgba(30, 94, 176, 0.06); padding: 0 18px; border-radius: 22px; max-height: 0; opacity: 0; transform: translateY(-8px); overflow: hidden; pointer-events: none; }
-            .nav-links.expanded { max-height: 520px; opacity: 1; transform: translateY(0); padding-top: 18px; padding-bottom: 18px; pointer-events: auto; }
-            .nav-links a { width: 100%; text-align: center; }
-            .theme-toggle { min-width: 48px; width: 48px; padding: 12px; border-radius: 50%; justify-content: center; }
-            .theme-toggle span { display: none; }
             .car-img { height: 200px; }
             .car-name { flex-direction: column; gap: 8px; }
             .image-group { gap: 14px; }
@@ -467,7 +579,6 @@
         }
         @media (max-width: 640px) {
             .container { padding: 0 16px; }
-            .navbar { padding: 18px 14px; }
             h2 { font-size: 1.9rem; }
             .car-grid { grid-template-columns: 1fr; gap: 22px; }
             .car-card { border-radius: 26px; }
@@ -483,22 +594,22 @@
     <div class="moving-car" aria-hidden="true"></div>
     <div class="moving-car reverse" aria-hidden="true"></div>
     <div class="container">
-        <!-- navigation with HOME tab -->
+        <!-- navigation: Home link removed, logo is clickable to home -->
         <nav class="navbar">
-            <div class="logo">
-                <i class="fas fa-gem"></i> MAAHIR AUTOS
-            </div>
+            <a href="index.html" class="logo-link">
+                <div class="logo"><i class="fas fa-gem"></i> MAAHIR AUTOS</div>
+            </a>
             <div class="nav-actions">
-                <div class="nav-links">
-                    <a href="index.html">Home</a>
+                <div class="nav-links" id="navLinks">
+                    <!-- Home link removed -->
                     <a href="listing.html" class="active">Listing</a>
                     <a href="faq.html">FAQ</a>
                     <a href="about.html">About</a>
                 </div>
-                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
-                <button class="theme-toggle" id="darkModeToggle">
-                    <i class="fas fa-moon"></i> <span>Dark</span>
-                </button>
+                <div class="nav-controls">
+                    <button class="theme-toggle" id="darkModeToggle"><i class="fas fa-moon"></i> <span>Dark</span></button>
+                    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+                </div>
             </div>
         </nav>
 
@@ -1512,14 +1623,15 @@
             </div>
         </div>
 
-        <!-- explicit count indicator -->
+        <!-- count indicator -->
         <div style="text-align: center; margin: 50px 0 30px; font-size: 1.2rem; color: var(--accent-blue); background: var(--bg-highlight); padding: 20px; border-radius: 60px; border: 1px solid var(--border-light);">
             <i class="fas fa-check-circle"></i> 50 vehicles displayed — each with enlarged rear & interior views. Hover or click on images to expand.
         </div>
 
-        <!-- footer -->
+        <!-- footer with underlined phone number -->
         <div class="footer-note">
-            <i class="fas fa-gem" style="color: var(--accent-blue);"></i> MAAHIR AUTOS · Abeokuta, Ogun State · +234 906 123 0710
+            <i class="fas fa-gem" style="color: var(--accent-blue);"></i> MAAHIR AUTOS · Abeokuta, Ogun State · 
+            <a href="https://wa.me/2349061230710" target="_blank" class="phone-link"><i class="fab fa-whatsapp" style="margin-right:4px;"></i> +234 906 123 0710</a>
         </div>
     </div>
 
@@ -1564,15 +1676,26 @@
             localStorage.setItem(darkModeKey, String(enabled));
         });
 
+        // hamburger toggle
         const navToggle = document.getElementById('navToggle');
-        const navLinks = document.querySelector('.nav-links');
+        const navLinks = document.getElementById('navLinks');
         if (navToggle && navLinks) {
-            navToggle.addEventListener('click', () => {
+            navToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const expanded = navLinks.classList.toggle('expanded');
                 navToggle.querySelector('i').className = expanded ? 'fas fa-times' : 'fas fa-bars';
             });
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 821) {
+                    const nav = document.querySelector('.navbar');
+                    if (nav && !nav.contains(e.target) && navLinks.classList.contains('expanded')) {
+                        navLinks.classList.remove('expanded');
+                        navToggle.querySelector('i').className = 'fas fa-bars';
+                    }
+                }
+            });
             window.addEventListener('resize', () => {
-                if (window.innerWidth > 820 && navLinks.classList.contains('expanded')) {
+                if (window.innerWidth >= 821 && navLinks.classList.contains('expanded')) {
                     navLinks.classList.remove('expanded');
                     navToggle.querySelector('i').className = 'fas fa-bars';
                 }
@@ -1581,22 +1704,17 @@
         initTheme();
         syncCars();
 
-        // Add click-to-expand functionality for thumbs
+        // click-to-expand thumbs
         document.querySelectorAll('.image-group .thumb').forEach(thumb => {
             thumb.addEventListener('click', function(e) {
                 e.stopPropagation();
-                // Remove expanded class from all thumbs in the same group
                 const parentGroup = this.closest('.image-group');
                 parentGroup.querySelectorAll('.thumb').forEach(t => {
                     if (t !== this) t.classList.remove('expanded');
                 });
-                
-                // Toggle expanded class on clicked thumb
                 this.classList.toggle('expanded');
             });
         });
-
-        // Close expanded thumbs when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.thumb')) {
                 document.querySelectorAll('.thumb.expanded').forEach(thumb => {
@@ -1605,7 +1723,7 @@
             }
         });
 
-        // Fallback images for missing local files
+        // fallback images
         document.querySelectorAll('img').forEach(img => {
             img.addEventListener('error', function() {
                 if (this.dataset.fallbackApplied) return;
